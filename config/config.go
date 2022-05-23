@@ -19,7 +19,7 @@ func GetConfig() *Config {
 		DB: &DBConfig{
 			Dialect :  "postgres",
 			Host:      "localhost",
-			Port:      5432,
+			Port:      5433,
 			User:      "kriti",
 			Password:  "nkx01",
 			DBname:    "go_dummy",

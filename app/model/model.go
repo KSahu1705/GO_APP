@@ -8,33 +8,33 @@ import (
 type User struct {
 	gorm.Model
 	// Id	 		int  `sql:"type:int;primary key"`
-	Username	string	`sql:"type:varchar(36)"`
-	Password	string	`sql:"type:varchar(36)"`
-	FirstName	string	`sql:"type:varchar(36)"`
-	LastName 	string	`sql:"type:varchar(36)"`
-	Phone		string	`sql:"type:varchar(36)"`
-	// CreatedAt	string	`sql:"type:varchar(36)"`
-	// ModifiedAt	string	`sql:"type:varchar(36)"`
-	Status 			bool  	`sql:"type:bool;"`
-	Addrs []UserAddress
+	Username  string
+	Password  string
+	FirstName string
+	LastName  string
+	Phone     string
+	// CreatedAt	string
+	// ModifiedAt	string
+	Status bool
+	Addrs  []UserAddress
 }
 
 type UserAddress struct {
 	gorm.Model
 	// Id	 			int    `sql:"type:int"`
-	UserId			uint   `sql:"type:uint;"`
-	AddressLine1	string `sql:"type:varchar(36)"`
-	AddressLine2	string	`sql:"type:varchar(36)"`
-	City		 	string	`sql:"type:varchar(36)"`
-	PostalCode		string	`sql:"type:varchar(36)"`
-	Country			string	`sql:"type:varchar(36)"`
-	Phone			string	`sql:"type:varchar(36)"`
-	Telephone		string	`sql:"type:varchar(36)"`
+	UserId       int `gorm:"column:user_id;not_null"`
+	AddressLine1 string
+	AddressLine2 string
+	City         string
+	PostalCode   string
+	Country      string
+	Phone        string
+	Telephone    string
 }
 
 // DBMigrate will create and migrate the tables, and then make the some relationships if necessary
 func DBMigrate(db *gorm.DB) *gorm.DB {
-	db.AutoMigrate(&User{},&UserAddress{})
+	db.AutoMigrate(&User{}, &UserAddress{})
 	return db
 }
 
