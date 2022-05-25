@@ -10,5 +10,5 @@ func main() {
 
 	app := &app.App{}
 	app.Initialize(config)
-	app.Run(":8001")
+	app.Run(":8002")
 }

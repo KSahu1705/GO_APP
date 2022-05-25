@@ -253,6 +253,16 @@ func DeleteUser(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	}
 	if err := db.Delete(&user).Error; err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
+	}
+	userAddress := model.UserAddress{}
+	// var userAddress UserAddress
+	if err := db.Find(&userAddress, model.UserAddress{UserId: wd, Model: gorm.Model{ID: wd_addr}}).Error; err != nil {
+		respondError(w, http.StatusNotFound, err.Error())
+		return
+	}
+
+	if err := db.Delete(&userAddress).Error; err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	respondJSON(w, http.StatusNoContent, nil)
