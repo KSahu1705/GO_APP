@@ -1,4 +1,4 @@
-# GO_APP
+# GO_APP (Without GORM)
 
 DB Schema: https://dbdiagram.io/d/628b853bf040f104c17c271a
 
@@ -15,17 +15,17 @@ DB Schema: https://dbdiagram.io/d/628b853bf040f104c17c271a
 ### API
 ```Golang
 // Routing for handling the projects
-a.Get("/users", a.GetAllUser)
-a.Get("/users/{id}", a.GetUser)
-a.Get("/users/{id}/address", a.GetUserAddress)
-a.Post("/users", a.CreateUser)
-a.Post("/users/{id}/add_address", a.CreateUserAddress)
-a.Put("/users/{id}/update_user", a.UpdateUser)
-a.Put("/users/{id}/{addr_id}/update_address", a.UpdateUserAddress)
-a.Put("/users/{id}/disable", a.DisableUser)
-a.Put("/users/{id}/enable", a.EnableUser)
-a.Delete("/users/{id}", a.DeleteUser)
-a.Delete("/users/{id}/{addr_id}", a.DeleteUserAddress)
+router.GET("/users", a.GetAllUser)
+router.GET("/users/:id", a.GetUser)
+router.GET("/users/:id/address", a.GetUserAddress)
+router.POST("/users", a.CreateUser)
+router.POST("/users/:id/add_address", a.CreateUserAddress)
+router.PUT("/users/:id/update_user", a.UpdateUser)
+router.PUT("/users/:id/update_address/:addr_id", a.UpdateUserAddress)
+router.PUT("/users/:id/disable", a.DisableUser)
+router.PUT("/users/:id/enable", a.EnableUser)
+router.DELETE("/users/:id", a.DeleteUser)
+router.DELETE("/users/:id/del/:addr_id", a.DeleteUserAddress)
 ```
 
 ### RUN:

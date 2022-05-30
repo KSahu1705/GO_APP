@@ -1,40 +1,46 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
+	"time"
+
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/jmoiron/sqlx"
+	"GO_APP/app/queries"
+
 )
 
 type User struct {
-	gorm.Model
-	// Id	 		int  `sql:"type:int;primary key"`
-	Username  string
-	Password  string
-	FirstName string
-	LastName  string
-	Phone     string
-	// CreatedAt	string
-	// ModifiedAt	string
-	Status bool
+	ID        int	    `db:"id"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
+	DeletedAt time.Time `db:"deleted_at"`
+	Username  string	`db:"username"`
+	Password  string	`db:"password"`
+	FirstName string	`db:"first_name"`
+	LastName  string	`db:"last_name"`
+	Phone     string	`db:"phone"`
+	Status bool			`db:"status"`
 	Addrs  []UserAddress
 }
 
 type UserAddress struct {
-	gorm.Model
-	// Id	 			int    `sql:"type:int"`
-	UserId       int `gorm:"column:user_id;not_null"`
-	AddressLine1 string
-	AddressLine2 string
-	City         string
-	PostalCode   string
-	Country      string
-	Phone        string
-	Telephone    string
+	ID        int	    `db:"id"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
+	DeletedAt time.Time `db:"deleted_at"`
+	UserId       int 	`db:"user_id"`
+	AddressLine1 string `db:"address_line1"`
+	AddressLine2 string	`db:"address_line2"`
+	City         string	`db:"city"`	
+	PostalCode   string	`db:"postal_code"`
+	Country      string	`db:"country"`
+	Phone        string	`db:"phone"`
+	Telephone    string	`db:"telephone"`
 }
 
 // DBMigrate will create and migrate the tables, and then make the some relationships if necessary
-func DBMigrate(db *gorm.DB) *gorm.DB {
-	db.AutoMigrate(&User{}, &UserAddress{})
+func DBMigrate(db *sqlx.DB) *sqlx.DB {	
+	db.MustExec(queries.CreateDB)
 	return db
 }
 
