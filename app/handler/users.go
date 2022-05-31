@@ -313,11 +313,11 @@ func DeleteUserAddress(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps h
 // 	"Id":  1,
 // 	"UserId": 240,
 // 	"AddressLine1": "abcdf",
-// 	"AddressLine2": "lucknow",
+// 	"AddressLine2": "hyderabad",
 // 	"City": "kanpur",
-// 	"PostalCode": "226021",
+// 	"PostalCode": "21",
 // 	"Country": "India",
-// 	"Phone": "9818476950",
+// 	"Phone": "95*****0",
 // 	"Telephone": "783232"
 // }
 
