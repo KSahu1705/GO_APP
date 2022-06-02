@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"GO_APP/app/model"
-	"GO_APP/app/queries"
+	"GO_APP/internal/model"
+	"GO_APP/internal/queries"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -18,15 +18,14 @@ import (
 var db *sqlx.DB
 
 // getUserOr404 gets a User instance if exists, or respond the 404 error otherwise
-func getUserOr404(db *sqlx.DB, id int, w http.ResponseWriter, r *http.Request) *model.User {
+func getUserOr404(db *sqlx.DB, id int, w http.ResponseWriter, r *http.Request) (*model.User, error) {
 	user := model.User{}
 	err := db.Get(&user, queries.QueryFindUser, id)
-	if (err!=nil){
-		respondError(w, http.StatusNotFound, err.Error())
-		return nil
-	}
-
-	return &user
+	// if (err!=nil){
+	// 	respondError(w, http.StatusNotFound, err.Error())
+	// 	return nil
+	// }
+	return &user, err
 }
 
 // getUserAddressOr404 gets a User Address instance if exists, or respond the 404 error otherwise
@@ -59,7 +58,9 @@ func CreateUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request) {
 		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondJSON(w, http.StatusCreated, user)
+	err = respondJSON(w, http.StatusCreated, user)
+	// Create log for the error
+
 }
 
 func CreateUserAddress(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -70,7 +71,7 @@ func CreateUserAddress(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps h
 		return 
 	}
 
-	user := getUserOr404(db, id, w, r)
+	user,_ := getUserOr404(db, id, w, r)
 	if user == nil {
 		return
 	}
@@ -92,7 +93,8 @@ func CreateUserAddress(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps h
 		return
 	}
 
-	respondJSON(w, http.StatusCreated, userAddress)
+	err = respondJSON(w, http.StatusCreated, userAddress)
+	// Create log for the error
 }
 
 func GetAllUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request) {
@@ -110,7 +112,9 @@ func GetAllUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request) {
 		users[i].Addrs = addresses
 	}
 
-	respondJSON(w, http.StatusOK, users)
+	err = respondJSON(w, http.StatusOK, users)
+	// Create log for the error
+
 }
 
 func GetUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -119,8 +123,9 @@ func GetUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprouter.
 		respondError(w, http.StatusInternalServerError, err.Error())
 	}
 
-	user := getUserOr404(db, id, w, r)
-	if user == nil {
+	user,err:= getUserOr404(db, id, w, r)
+	if err != nil {
+		respondError(w, http.StatusNotFound, err.Error())
 		return
 	}
 	addresses := []model.UserAddress{}
@@ -131,7 +136,9 @@ func GetUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprouter.
 		respondError(w, http.StatusInternalServerError, err.Error())
 	}
 
-	respondJSON(w, http.StatusOK, user)
+	err = respondJSON(w, http.StatusOK, user)
+	// Create log for the error
+
 }
 
 func GetUserAddress(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -141,11 +148,14 @@ func GetUserAddress(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps http
 	}
 
 	userAddress := getUserAddressOr404(db, id, w, r)
+
 	if userAddress == nil {
 		return
 	}
 
-	respondJSON(w, http.StatusOK, userAddress)
+	err = respondJSON(w, http.StatusOK, userAddress)
+	// Create log for the error
+
 }
 
 func UpdateUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -155,7 +165,7 @@ func UpdateUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprout
 		respondError(w, http.StatusInternalServerError, err.Error())
 	}
 
-	user := getUserOr404(db, id, w, r)
+	user,_ := getUserOr404(db, id, w, r)
 	if user == nil {
 		return
 	}
@@ -176,7 +186,9 @@ func UpdateUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprout
 		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondJSON(w, http.StatusOK, user)
+	err = respondJSON(w, http.StatusOK, user)
+	// Create log for the error
+
 }
 
 func UpdateUserAddress(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -210,12 +222,14 @@ func UpdateUserAddress(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps h
 		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondJSON(w, http.StatusOK, userAddress)
+	err = respondJSON(w, http.StatusOK, userAddress)
+	// Create log for the error
+
 }
 
 func DisableUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	id, err := strconv.Atoi(ps.ByName("id"))
-	user := getUserOr404(db, id, w, r)
+	user,_ := getUserOr404(db, id, w, r)
 	if user == nil {
 		return
 	}
@@ -229,12 +243,14 @@ func DisableUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprou
 		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondJSON(w, http.StatusOK, user)
+	err = respondJSON(w, http.StatusOK, user)
+	// Create log for the error
+	
 }
 
 func EnableUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	id, err := strconv.Atoi(ps.ByName("id"))
-	user := getUserOr404(db, id, w, r)
+	user,_ := getUserOr404(db, id, w, r)
 	if user == nil {
 		return
 	}
@@ -249,7 +265,8 @@ func EnableUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprout
 		return
 	}
 
-	respondJSON(w, http.StatusOK, user)
+	err = respondJSON(w, http.StatusOK, user)
+	// Create log for the error
 }
 
 
@@ -260,7 +277,7 @@ func DeleteUser(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps httprout
 	if err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
 	}
-	user := getUserOr404(db, id, w, r)
+	user,_ := getUserOr404(db, id, w, r)
 	if user == nil {
 		return
 	}
@@ -313,17 +330,17 @@ func DeleteUserAddress(db *sqlx.DB, w http.ResponseWriter, r *http.Request, ps h
 // 	"Id":  1,
 // 	"UserId": 240,
 // 	"AddressLine1": "abcdf",
-// 	"AddressLine2": "lucknow",
-// 	"City": "kanpur",
-// 	"PostalCode": "226021",
+// 	"AddressLine2": "low",
+// 	"City": "kar",
+// 	"PostalCode": "2221",
 // 	"Country": "India",
-// 	"Phone": "9818476950",
+// 	"Phone": "9810",
 // 	"Telephone": "783232"
 // }
 
 // {
 //     "Id":2140,
-//     "Username":"Kriti",
+//     "Username":"Kti",
 //     "Password":"",
 //     "ModifiedAt":"",
 //     "Addrs":null

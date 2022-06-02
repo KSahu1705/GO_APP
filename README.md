@@ -1,4 +1,4 @@
-# GO_APP (Without GORM)
+# GO_APP (Without GORM)golang
 
 DB Schema: https://dbdiagram.io/d/628b853bf040f104c17c271a
 

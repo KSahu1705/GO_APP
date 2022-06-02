@@ -5,7 +5,7 @@ import (
 
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/jmoiron/sqlx"
-	"GO_APP/app/queries"
+	"GO_APP/internal/queries"
 
 )
 

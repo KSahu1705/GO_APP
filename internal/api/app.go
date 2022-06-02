@@ -1,8 +1,8 @@
-package app
+package api
 
 import (
-	"GO_APP/app/handler"
-	"GO_APP/app/model"
+	"GO_APP/internal/handler"
+	"GO_APP/internal/model"
 	"GO_APP/config"
 	"fmt"
 	"log"

@@ -1,6 +1,5 @@
 package queries
 
-
 const (
 	CreateDB = `
 		CREATE TABLE IF NOT EXISTS users (
